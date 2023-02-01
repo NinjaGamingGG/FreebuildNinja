@@ -1,0 +1,18 @@
+prefix: '§8[§6NinjaFreebuild§8]§r '
+world_configuration:
+  spawn:
+    world_name: spawn
+    #⮟ The world's spawn location
+    spawn_location_x: 0.0
+    spawn_location_y: 0.0
+    spawn_location_z: 0.0
+    spawn_yaw: 0.0
+    spawn_pitch: 0.0
+  wilderness:
+    world_name: wilderness
+
+database:
+  connectionString: 'jdbc:mysql://localhost:3306'
+  userName: 'root'
+  password: 'password'
+  databaseName: 'NinjaFreebuild'

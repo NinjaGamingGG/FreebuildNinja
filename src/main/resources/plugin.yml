@@ -1,0 +1,23 @@
+name: Ninjafreebuild
+version: '${project.version}'
+main: gg.ninjagaming.ninjafreebuild.NinjaFreebuild
+api-version: 1.19
+authors: [ iMortalTrix ]
+description: Little Experimental Freebuild Management Plugin
+
+commands:
+  home:
+    description: Teleports you to your home
+    usage: /<command>
+  sethome:
+    description: Sets your home
+    usage: /<command>
+  deletehome:
+    description: Deletes your home
+    usage: /<command>
+  wilderness:
+    description: Teleports you to the wilderness
+    usage: /<command>
+  spawn:
+    description: Teleports you to the spawn
+    usage: /<command>
