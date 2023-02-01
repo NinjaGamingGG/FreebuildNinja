@@ -7,6 +7,9 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.ktorm.dsl.*
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class SpawnCommand: CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
@@ -38,11 +41,47 @@ class SpawnCommand: CommandExecutor {
         val spawnYaw = config.getDouble("world_configuration.spawn.spawn_yaw")
         val spawnPitch = config.getDouble("world_configuration.spawn.spawn_pitch")
 
+        if (!hasHomeSet(sender) && sender.world.name != spawnWorldName) {
+
+            val playerLocation = sender.location
+            sender.sendMessage("${NinjaFreebuild.getPrefix()}You haven't set a home yet! (/home set) Please do so before teleporting to spawn!")
+
+            if(sender.firstPlayed > LocalDateTime.now().minusWeeks(1).toEpochSecond(ZoneOffset.UTC)) {
+                sender.sendMessage("${NinjaFreebuild.getPrefix()}Because you are new on the server we captured your last location: " +
+                        "x: ${playerLocation.x} y: ${playerLocation.y} z: ${playerLocation.z}!")
+
+            }
+
+        }
+
+
+
+
+
         sender.sendMessage("${NinjaFreebuild.getPrefix()}§aTeleporting you back to spawn...")
         sender.teleport(Location(spawnWorld, spawnX, spawnY, spawnZ, spawnYaw.toFloat(), spawnPitch.toFloat()))
 
 
 
         return true
+    }
+
+    fun hasHomeSet(player: Player): Boolean {
+        val playerId = player.uniqueId.toString()
+
+        val database = NinjaFreebuild.getDatabase()
+
+        if (database == null) {
+            return false
+        }
+
+        var homeExists = false
+
+        database.from(gg.ninjagaming.ninjafreebuild.database.tables.PlayerHomesTable)
+            .select()
+            .where ( gg.ninjagaming.ninjafreebuild.database.tables.PlayerHomesTable.PlayerId eq playerId )
+            .forEach {  homeExists = true}
+
+        return homeExists
     }
 }
