@@ -1,5 +1,6 @@
 package gg.ninjagaming.ninjafreebuild
 
+import gg.ninjagaming.ninjafreebuild.commands.farmworld.FarmWorldCommand
 import gg.ninjagaming.ninjafreebuild.commands.home.DeleteHomeCommand
 import gg.ninjagaming.ninjafreebuild.commands.home.HomeCommand
 import gg.ninjagaming.ninjafreebuild.commands.home.SetHomeCommand
@@ -40,6 +41,7 @@ class NinjaFreebuild : JavaPlugin() {
 
         WorldManager.prepareWildernessWorld()
         WorldManager.prepareSpawnWorld()
+        WorldManager.prepareFarmWorld()
     }
 
     override fun onDisable() {
@@ -54,6 +56,7 @@ class NinjaFreebuild : JavaPlugin() {
 
         instance.getCommand("wilderness")?.setExecutor(WildernessCommand())
         instance.getCommand("spawn")?.setExecutor(SpawnCommand())
+        instance.getCommand("farmworld")?.setExecutor(FarmWorldCommand())
     }
 
     private fun loadFiles(){
@@ -63,11 +66,7 @@ class NinjaFreebuild : JavaPlugin() {
 
         if (!configFile.exists()) {
             val classLoader = javaClass.classLoader
-            val resource = classLoader.getResource("config.yml")
-
-            if (resource == null) {
-                throw IllegalArgumentException("Config file not found")
-            }
+            val resource = classLoader.getResource("config.yml") ?: throw IllegalArgumentException("Config file not found")
 
             configFile.createNewFile()
             File(dataFolder, "config.yml").writeBytes(resource.readBytes())

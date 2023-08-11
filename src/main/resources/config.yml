@@ -10,6 +10,8 @@ world_configuration:
     spawn_pitch: 0.0
   wilderness:
     world_name: wilderness
+  FarmWorld:
+    world_name: FarmWorld
 
 database:
   connectionString: 'jdbc:mysql://localhost:3306'
