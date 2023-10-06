@@ -22,8 +22,18 @@ class WildernessCommand: CommandExecutor {
             return true
         }
 
-        val randomX =-3000.0 + Random.nextDouble() * (3000.0 - -3000.0)
-        val randomZ =-3000.0 + Random.nextDouble() * (3000.0 - -3000.0)
+        val config = NinjaFreebuild.getConfig()
+
+        val rtpAreaString = config.getString("world_configuration.wilderness.rtp_area")
+
+        var rtpArea = rtpAreaString?.toDouble()
+
+        if (rtpArea == null)
+            rtpArea = 1000.0
+
+
+        val randomX =-rtpArea + Random.nextDouble() * (rtpArea - -rtpArea)
+        val randomZ =-rtpArea + Random.nextDouble() * (rtpArea - -rtpArea)
 
         val wildernessWorld = Bukkit.getWorld("wilderness")
 

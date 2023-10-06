@@ -8,17 +8,19 @@ import gg.ninjagaming.ninjafreebuild.commands.home.TeleportHomeCommand
 import gg.ninjagaming.ninjafreebuild.commands.spawn.SpawnCommand
 import gg.ninjagaming.ninjafreebuild.commands.wilderness.WildernessCommand
 import gg.ninjagaming.ninjafreebuild.database.connectDatabase
+import gg.ninjagaming.ninjafreebuild.events.PlayerTeleportEventListener
 import gg.ninjagaming.ninjafreebuild.managers.WorldManager
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 import org.ktorm.database.Database
 import java.io.File
 import java.lang.IllegalArgumentException
 
 @Suppress("SpellCheckingInspection")
-class NinjaFreebuild : JavaPlugin() {
+class NinjaFreebuild : JavaPlugin(),Listener {
 
     private val instance: NinjaFreebuild = this
 
@@ -29,6 +31,8 @@ class NinjaFreebuild : JavaPlugin() {
         // Plugin startup logic
         registerCommands()
         loadFiles()
+        registerEvents()
+
 
         setDatabase(connectDatabase(
             getConfig().getString("database.connectionString")!!,
@@ -46,6 +50,11 @@ class NinjaFreebuild : JavaPlugin() {
 
     override fun onDisable() {
         // Plugin shutdown logic
+    }
+
+    private fun registerEvents(){
+        server.pluginManager.registerEvents(PlayerTeleportEventListener,this)
+
     }
 
     private fun registerCommands() {

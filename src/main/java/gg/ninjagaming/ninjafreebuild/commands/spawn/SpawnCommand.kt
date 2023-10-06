@@ -54,10 +54,6 @@ class SpawnCommand: CommandExecutor {
 
         }
 
-
-
-
-
         sender.sendMessage("${NinjaFreebuild.getPrefix()}§aTeleporting you back to spawn...")
         sender.teleport(Location(spawnWorld, spawnX, spawnY, spawnZ, spawnYaw.toFloat(), spawnPitch.toFloat()))
 
@@ -69,11 +65,7 @@ class SpawnCommand: CommandExecutor {
     fun hasHomeSet(player: Player): Boolean {
         val playerId = player.uniqueId.toString()
 
-        val database = NinjaFreebuild.getDatabase()
-
-        if (database == null) {
-            return false
-        }
+        val database = NinjaFreebuild.getDatabase() ?: return false
 
         var homeExists = false
 

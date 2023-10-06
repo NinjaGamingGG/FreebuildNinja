@@ -21,3 +21,6 @@ commands:
   spawn:
     description: Teleports you to the spawn
     usage: /<command>
+  farmworld:
+    description: Teleports you to the farmworld
+    usage: /<command>

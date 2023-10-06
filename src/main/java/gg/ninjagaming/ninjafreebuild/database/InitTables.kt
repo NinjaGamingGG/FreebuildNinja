@@ -1,6 +1,7 @@
 package gg.ninjagaming.ninjafreebuild.database
 
 import org.ktorm.database.Database
+import org.ktorm.database.use
 
 fun initTables(database: Database?) {
 
@@ -19,6 +20,18 @@ fun initTables(database: Database?) {
                     "HomeLocationZ DOUBLE," +
                     "HomeLocationYaw FLOAT," +
                     "HomeLocationPitch FLOAT)")
+        }
+
+        connection.createStatement().use { statement ->
+
+            statement.execute("CREATE TABLE IF NOT EXISTS LastPlayerWorldPosition (EntryId VARCHAR(36) PRIMARY KEY,"+
+            "PlayerId VARCHAR(36),"+
+            "WorldName VARCHAR(36),"+
+            "WorldLocationX DOUBLE,"+
+            "WorldLocationY DOUBLE,"+
+            "WorldLocationZ DOUBLE,"+
+            "WorldLocationYaw FLOAT,"+
+            "WorldLocationPitch FLOAT)")
         }
 
     }
