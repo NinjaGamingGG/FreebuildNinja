@@ -13,15 +13,12 @@ object PlayerJoinEventListener: Listener {
     fun playerJoinEvent(event: PlayerJoinEvent)
     {
         val config = NinjaFreebuild.getConfig()
-        val spawnWorldName = config.getString("world_configuration.spawn.world_name")
+        val wildernessWorldName = config.getString("world_configuration.wilderness.world_name")
 
-        if (event.player.world.name != spawnWorldName)
-            return
-
-        //If player hasn't set a home don't tp to spawn on join
-        if (!HomeManager.hasHomeSet(event.player))
+        //If player hasn't set a home and is in wilderness world don't tp to spawn on join
+        if (!HomeManager.hasHomeSet(event.player) && event.player.world.name == wildernessWorldName)
         {
-            event.player.sendMessage("${NinjaFreebuild.getPrefix()}Hey, you didn't got Teleported back to Spawn because you didn't set a home yet! You can do it anytime by using /home set")
+            event.player.sendMessage("${NinjaFreebuild.getPrefix()}Hey, you didn't got Teleported back to Spawn because you didn't set a home yet! §eYou can do it anytime by using /home set")
             return
         }
 
@@ -31,6 +28,8 @@ object PlayerJoinEventListener: Listener {
         val spawnZ = config.getDouble("world_configuration.spawn.spawn_location_z")
         val spawnPitch = config.getDouble("world_configuration.spawn.spawn_location_pitch")
         val spawnYaw = config.getDouble("world_configuration.spawn.spawn_location_yaw")
+
+        val spawnWorldName = config.getString("world_configuration.spawn.world_name")?: "spawn"
 
         event.player.teleport(Location(Bukkit.getWorld(spawnWorldName),spawnX,spawnY,spawnZ,spawnYaw.toFloat(), spawnPitch.toFloat()))
     }
