@@ -14,14 +14,13 @@ import gg.ninjagaming.ninjafreebuild.managers.WorldManager
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 import org.ktorm.database.Database
 import java.io.File
 import java.lang.IllegalArgumentException
 
 @Suppress("SpellCheckingInspection")
-class NinjaFreebuild : JavaPlugin(),Listener {
+class NinjaFreebuild : JavaPlugin() {
 
     private val instance: NinjaFreebuild = this
 
@@ -55,7 +54,7 @@ class NinjaFreebuild : JavaPlugin(),Listener {
 
     private fun registerEvents(){
         server.pluginManager.registerEvents(PlayerTeleportEventListener,this)
-        server.pluginManager.registerEvents(PlayerTeleportEventListener,this)
+        server.pluginManager.registerEvents(PlayerJoinEventListener,this)
 
     }
 
