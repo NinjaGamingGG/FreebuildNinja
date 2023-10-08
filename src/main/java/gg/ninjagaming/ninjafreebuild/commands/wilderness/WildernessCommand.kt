@@ -18,7 +18,7 @@ class WildernessCommand: CommandExecutor {
         }
 
         if (sender.world.name == "wilderness") {
-            sender.sendMessage("${NinjaFreebuild.getPrefix()}§cYou can only use this command from the wilderness!")
+            sender.sendMessage("${NinjaFreebuild.getPrefix()}§cYou can't use this command from the wilderness!")
             return true
         }
 
