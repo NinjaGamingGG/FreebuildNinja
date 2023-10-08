@@ -72,6 +72,8 @@ class FarmWorldCommand: CommandExecutor {
 
         sender.teleport(Location(Bukkit.getWorld(worldName),lastPositionX,lastPositionY,lastPositionZ,lastPositionYaw,lastPositionPitch))
 
+        sender.sendMessage("${NinjaFreebuild.getPrefix()}You are now in the Farmworld! You are allowed to Remove/ Build Blocks wherever you wish! §cThis world gets reset after a few days")
+
 
         return true
     }

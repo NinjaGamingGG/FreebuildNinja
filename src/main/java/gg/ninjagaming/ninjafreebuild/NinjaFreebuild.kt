@@ -8,6 +8,7 @@ import gg.ninjagaming.ninjafreebuild.commands.home.TeleportHomeCommand
 import gg.ninjagaming.ninjafreebuild.commands.spawn.SpawnCommand
 import gg.ninjagaming.ninjafreebuild.commands.wilderness.WildernessCommand
 import gg.ninjagaming.ninjafreebuild.database.connectDatabase
+import gg.ninjagaming.ninjafreebuild.events.PlayerJoinEventListener
 import gg.ninjagaming.ninjafreebuild.events.PlayerTeleportEventListener
 import gg.ninjagaming.ninjafreebuild.managers.WorldManager
 import org.bukkit.Bukkit
@@ -53,6 +54,7 @@ class NinjaFreebuild : JavaPlugin(),Listener {
     }
 
     private fun registerEvents(){
+        server.pluginManager.registerEvents(PlayerTeleportEventListener,this)
         server.pluginManager.registerEvents(PlayerTeleportEventListener,this)
 
     }
