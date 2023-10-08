@@ -18,8 +18,8 @@ object PlayerTeleportEventListener: Listener {
 
             val lastPosition = event.from
 
-            val spawnWorldName = config.getString("world_configuration.spawn.world_name")
-            if (lastPosition.world.name == spawnWorldName)
+            val farmWorldName = config.getString("world_configuration.farmworld.world_name")
+            if (lastPosition.world.name != farmWorldName)
                 return
 
             //If user Teleported inside a world i.e. /home command

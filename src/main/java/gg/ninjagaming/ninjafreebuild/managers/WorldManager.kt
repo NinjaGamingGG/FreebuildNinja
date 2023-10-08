@@ -14,7 +14,7 @@ class WorldManager {
             val worldName = NinjaFreebuild.getConfig().getString("world_configuration.wilderness.world_name")
                 ?: throw IllegalArgumentException("Wilderness world name not found in config.yml")
 
-            prepareWorld(worldName)
+            prepareWorld(worldName, false)
         }
 
         fun prepareSpawnWorld() {
@@ -22,7 +22,7 @@ class WorldManager {
                 ?: throw IllegalArgumentException("Spawn world name not found in config.yml")
 
 
-            val spawnWorld = prepareWorld(worldName) ?: return
+            val spawnWorld = prepareWorld(worldName, false) ?: return
 
             spawnWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
             spawnWorld.setGameRule(GameRule.DO_WEATHER_CYCLE, false)
@@ -37,17 +37,17 @@ class WorldManager {
             val worldName = NinjaFreebuild.getConfig().getString("world_configuration.FarmWorld.world_name")
                 ?: throw IllegalArgumentException("Farm world name not found in config.yml")
 
-            prepareWorld(worldName)
+            prepareWorld(worldName, true)
         }
 
-        private fun prepareWorld(worldName: String): World?
+        private fun prepareWorld(worldName: String, generateStructures: Boolean): World?
         {
             val loadWorld = Bukkit.getWorld(worldName)
 
             if (loadWorld != null)
                 return loadWorld
 
-            val newWorld = Bukkit.createWorld(WorldCreator(worldName))
+            val newWorld = Bukkit.createWorld(WorldCreator(worldName).generateStructures(generateStructures))
 
             Bukkit.getWorlds().add(newWorld)
 
