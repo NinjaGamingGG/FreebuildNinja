@@ -1,10 +1,7 @@
 package gg.ninjagaming.ninjafreebuild.managers
 
 import gg.ninjagaming.ninjafreebuild.NinjaFreebuild
-import org.bukkit.Bukkit
-import org.bukkit.GameRule
-import org.bukkit.World
-import org.bukkit.WorldCreator
+import org.bukkit.*
 import kotlin.IllegalArgumentException
 
 class WorldManager {
@@ -20,12 +17,13 @@ class WorldManager {
         fun prepareSpawnWorld() {
             val worldName = NinjaFreebuild.getConfig().getString("world_configuration.spawn.world_name")
                 ?: throw IllegalArgumentException("Spawn world name not found in config.yml")
-
-
+            
             val spawnWorld = prepareWorld(worldName, false) ?: return
 
             spawnWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
             spawnWorld.setGameRule(GameRule.DO_WEATHER_CYCLE, false)
+            spawnWorld.difficulty = Difficulty.PEACEFUL
+            spawnWorld.pvp = false
 
             spawnWorld.time = 6000
             spawnWorld.clearWeatherDuration = 1
