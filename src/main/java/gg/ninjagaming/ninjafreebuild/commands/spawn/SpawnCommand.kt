@@ -1,6 +1,7 @@
 package gg.ninjagaming.ninjafreebuild.commands.spawn
 
 import gg.ninjagaming.ninjafreebuild.NinjaFreebuild
+import gg.ninjagaming.ninjafreebuild.managers.HomeManager
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.Command
@@ -41,7 +42,7 @@ class SpawnCommand: CommandExecutor {
         val spawnYaw = config.getDouble("world_configuration.spawn.spawn_yaw")
         val spawnPitch = config.getDouble("world_configuration.spawn.spawn_pitch")
 
-        if (!hasHomeSet(sender) && sender.world.name != spawnWorldName) {
+        if (!HomeManager.hasHomeSet(sender) && sender.world.name != spawnWorldName) {
 
             val playerLocation = sender.location
             sender.sendMessage("${NinjaFreebuild.getPrefix()}You haven't set a home yet! (/home set) Please do so before teleporting to spawn!")
@@ -62,18 +63,5 @@ class SpawnCommand: CommandExecutor {
         return true
     }
 
-    fun hasHomeSet(player: Player): Boolean {
-        val playerId = player.uniqueId.toString()
 
-        val database = NinjaFreebuild.getDatabase() ?: return false
-
-        var homeExists = false
-
-        database.from(gg.ninjagaming.ninjafreebuild.database.tables.PlayerHomesTable)
-            .select()
-            .where ( gg.ninjagaming.ninjafreebuild.database.tables.PlayerHomesTable.PlayerId eq playerId )
-            .forEach {  homeExists = true}
-
-        return homeExists
-    }
 }

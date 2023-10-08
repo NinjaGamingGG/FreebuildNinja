@@ -14,7 +14,17 @@ class HomeManager {
             return true
         }
 
-        if (sender.location.world.name == "spawn") {
+        val config = NinjaFreebuild.getConfig()
+
+        val spawnWorldName = config.getString("world_configuration.spawn.world_name")
+
+        if (sender.location.world.name == spawnWorldName) {
+            sender.sendMessage("${NinjaFreebuild.getPrefix()}§cYou cant set a home in spawn!")
+            //return true
+        }
+
+        val farmWorldName = config.getString("world_configuration.farmworld.world_name")
+        if (sender.location.world.name == farmWorldName) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cYou cant set a home in spawn!")
             //return true
         }
@@ -191,6 +201,21 @@ class HomeManager {
 
         fun listHomes(sender: CommandSender): Boolean {
             return HomeManager().listHomes(sender)
+        }
+
+        fun hasHomeSet(player: Player): Boolean {
+            val playerId = player.uniqueId.toString()
+
+            val database = NinjaFreebuild.getDatabase() ?: return false
+
+            var homeExists = false
+
+            database.from(gg.ninjagaming.ninjafreebuild.database.tables.PlayerHomesTable)
+                    .select()
+                    .where ( gg.ninjagaming.ninjafreebuild.database.tables.PlayerHomesTable.PlayerId eq playerId )
+                    .forEach {  homeExists = true}
+
+            return homeExists
         }
     }
 
