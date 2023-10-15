@@ -1,6 +1,7 @@
 package gg.ninjagaming.ninjafreebuild.commands.farmworld
 
 import gg.ninjagaming.ninjafreebuild.NinjaFreebuild
+import gg.ninjagaming.ninjafreebuild.database.tables.FarmWorldIndex
 import gg.ninjagaming.ninjafreebuild.database.tables.LastPlayerWorldPosition
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -10,6 +11,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.ktorm.database.iterator
 import org.ktorm.dsl.*
+import java.time.Instant
 import kotlin.random.Random
 
 class FarmWorldCommand: CommandExecutor {
@@ -29,14 +31,22 @@ class FarmWorldCommand: CommandExecutor {
 
         val config = NinjaFreebuild.getConfig()
 
-        val worldName = config.getString("world_configuration.farmworld.world_name")
+        val farmWorlds = database.from(FarmWorldIndex).select()
 
-        if (worldName == null)
+        var farmWorldCreated: Instant ?= null
+        var farmWorldId= ""
+
+        for (row in farmWorlds.rowSet)
         {
-            println("${NinjaFreebuild.getPrefix()}§cError: No Farmworld name set!")
-            return false
+            farmWorldId = row[FarmWorldIndex.FarmWorldId] as String
+            farmWorldCreated = row[FarmWorldIndex.CreatedAt] as Instant
         }
 
+
+        if (farmWorldId == "")
+            return false
+
+        val worldName = "Farmworld-$farmWorldId"
 
         val lastPosition = database.from(LastPlayerWorldPosition).select().where((LastPlayerWorldPosition.PlayerId eq sender.uniqueId.toString()) and (LastPlayerWorldPosition.WorldName eq worldName))
 
@@ -45,6 +55,7 @@ class FarmWorldCommand: CommandExecutor {
         var lastPositionZ = 0.0
         var lastPositionPitch = 0f
         var lastPositionYaw = 0f
+
 
         val farmWorld = Bukkit.getWorld(worldName)
 
@@ -74,6 +85,8 @@ class FarmWorldCommand: CommandExecutor {
 
         sender.sendMessage("${NinjaFreebuild.getPrefix()}You are now in the Farmworld! You are allowed to Remove/ Build Blocks wherever you wish! §cThis world gets reset after a few days")
 
+        if (farmWorldCreated == null)
+            return false
 
         return true
     }

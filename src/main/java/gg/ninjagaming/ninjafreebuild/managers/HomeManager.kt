@@ -11,7 +11,7 @@ class HomeManager {
     fun setHome(sender: CommandSender, homeName: String) : Boolean {
         if (sender !is Player) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cOnly players can use this command!")
-            return true
+            return false
         }
 
         val config = NinjaFreebuild.getConfig()
@@ -20,27 +20,27 @@ class HomeManager {
 
         if (sender.location.world.name == spawnWorldName) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cYou cant set a home in spawn!")
-            //return true
+            return true
         }
 
         val farmWorldName = config.getString("world_configuration.farmworld.world_name")
         if (sender.location.world.name == farmWorldName) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cYou cant set a home in spawn!")
-            //return true
+            return true
         }
 
         val database = NinjaFreebuild.getDatabase()
 
         if (checkIfHomeExists(sender, homeName)) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cYou already have a home with that name! Please Delete it first to Continue!")
-            return true
+            return false
         }
 
         val uuid = UUID.randomUUID().toString()
 
         if (database == null) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cDatabase is not connected!")
-            return true
+            return false
         }
 
         database.insert(gg.ninjagaming.ninjafreebuild.database.tables.PlayerHomesTable) {
@@ -63,12 +63,12 @@ class HomeManager {
     {
         if (sender !is Player) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cOnly players can use this command!")
-            return true
+            return false
         }
 
         if (homeName == "default") {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cYou cant delete your default home!")
-            return true
+            return false
         }
 
         val database = NinjaFreebuild.getDatabase()
@@ -95,14 +95,14 @@ class HomeManager {
     {
         if (sender !is Player) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cOnly players can use this command!")
-            return true
+            return false
         }
 
         val database = NinjaFreebuild.getDatabase()
 
         if (database == null) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cDatabase is not connected!")
-            return true
+            return false
         }
 
         var homeLocationWorld = ""
@@ -140,14 +140,14 @@ class HomeManager {
     {
         if (sender !is Player) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cOnly players can use this command!")
-            return true
+            return false
         }
 
         val database = NinjaFreebuild.getDatabase()
 
         if (database == null) {
             sender.sendMessage("${NinjaFreebuild.getPrefix()}§cDatabase is not connected!")
-            return true
+            return false
         }
 
         var homeList = ""

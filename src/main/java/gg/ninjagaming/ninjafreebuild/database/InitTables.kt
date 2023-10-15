@@ -34,5 +34,10 @@ fun initTables(database: Database?) {
             "WorldLocationPitch FLOAT)")
         }
 
+        connection.createStatement().use { statement ->
+            statement.execute("CREATE TABLE IF NOT EXISTS FarmWorldIndex (FarmWorldId VARCHAR(36) PRIMARY KEY,"+
+            "CreatedAt TIMESTAMP)")
+        }
+
     }
 }

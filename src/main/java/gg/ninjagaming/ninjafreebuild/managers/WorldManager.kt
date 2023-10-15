@@ -2,6 +2,7 @@ package gg.ninjagaming.ninjafreebuild.managers
 
 import gg.ninjagaming.ninjafreebuild.NinjaFreebuild
 import org.bukkit.*
+import java.io.File
 import kotlin.IllegalArgumentException
 
 class WorldManager {
@@ -31,9 +32,7 @@ class WorldManager {
             spawnWorld.setGameRule(GameRule.DO_MOB_SPAWNING, false)
         }
 
-        fun prepareFarmWorld(){
-            val worldName = NinjaFreebuild.getConfig().getString("world_configuration.FarmWorld.world_name")
-                ?: throw IllegalArgumentException("Farm world name not found in config.yml")
+        fun prepareFarmWorld(worldName: String){
 
             prepareWorld(worldName, true)
         }
@@ -50,6 +49,21 @@ class WorldManager {
             Bukkit.getWorlds().add(newWorld)
 
             return newWorld
+        }
+
+        fun worldExists(woldName: String): Boolean {
+
+            return File("./$woldName").exists()
+        }
+
+        fun unloadWorld(woldName: String, save: Boolean, delete: Boolean = false)
+        {
+            val worldFolder = Bukkit.getWorld(woldName)?.worldFolder
+            Bukkit.unloadWorld(woldName,save)
+
+            if (delete && worldFolder != null)
+                worldFolder.delete()
+
         }
     }
 }

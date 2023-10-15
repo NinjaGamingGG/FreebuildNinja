@@ -10,6 +10,7 @@ import gg.ninjagaming.ninjafreebuild.commands.wilderness.WildernessCommand
 import gg.ninjagaming.ninjafreebuild.database.connectDatabase
 import gg.ninjagaming.ninjafreebuild.events.PlayerJoinEventListener
 import gg.ninjagaming.ninjafreebuild.events.PlayerTeleportEventListener
+import gg.ninjagaming.ninjafreebuild.managers.FarmWorldManager
 import gg.ninjagaming.ninjafreebuild.managers.WorldManager
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration
@@ -32,6 +33,7 @@ class NinjaFreebuild : JavaPlugin() {
         registerCommands()
         loadFiles()
         registerEvents()
+        registerSchedulerTimers()
 
 
         setDatabase(connectDatabase(
@@ -45,7 +47,6 @@ class NinjaFreebuild : JavaPlugin() {
 
         WorldManager.prepareWildernessWorld()
         WorldManager.prepareSpawnWorld()
-        WorldManager.prepareFarmWorld()
     }
 
     override fun onDisable() {
@@ -56,6 +57,11 @@ class NinjaFreebuild : JavaPlugin() {
         server.pluginManager.registerEvents(PlayerTeleportEventListener,this)
         server.pluginManager.registerEvents(PlayerJoinEventListener,this)
 
+    }
+
+    private fun registerSchedulerTimers()
+    {
+        server.scheduler.runTaskTimer(this,FarmWorldManager.runnableTimer(),20*3,20*6)
     }
 
     private fun registerCommands() {
