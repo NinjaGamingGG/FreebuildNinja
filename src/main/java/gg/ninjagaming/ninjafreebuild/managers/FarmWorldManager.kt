@@ -2,8 +2,10 @@ package gg.ninjagaming.ninjafreebuild.managers
 
 import gg.ninjagaming.ninjafreebuild.NinjaFreebuild
 import gg.ninjagaming.ninjafreebuild.database.tables.FarmWorldIndex
+import org.ktorm.database.Database
 import org.ktorm.database.iterator
 import org.ktorm.dsl.*
+import java.io.File
 import java.util.Calendar
 
 class FarmWorldManager {
@@ -60,14 +62,10 @@ companion object{
 
         val now = Calendar.getInstance().time.toInstant()
 
+
         if (expires.isBefore(now))
         {
-            database.delete(FarmWorldIndex){it.FarmWorldId eq worldId}
-
-            WorldManager.unloadWorld(worldName,false, delete = true)
-
-            createNewFarmWorld()
-            return
+            deleteFarmWorld(database,worldId,worldName)
         }
 
         WorldManager.prepareFarmWorld(worldName)
@@ -92,10 +90,22 @@ companion object{
 
     }
 
+    private fun deleteFarmWorld(database: Database, worldId: String, worldName: String)
+    {
+        database.delete(FarmWorldIndex){it.FarmWorldId eq worldId}
+
+        WorldManager.unloadWorld(worldName,false, delete = true)
+
+        File("./$worldName").delete()
+
+        createNewFarmWorld()
+        return
+    }
+
     private val charPool = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
     private val randomString = (1..5)
-        .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
+        .map { _ -> kotlin.random.Random.nextInt(0, charPool.size) }
         .map(charPool::get)
         .joinToString("")
 }
