@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.ktorm.database.iterator
 import org.ktorm.dsl.*
 import java.time.Instant
+import java.util.*
 import kotlin.random.Random
 
 class FarmWorldCommand: CommandExecutor {
@@ -85,9 +86,18 @@ class FarmWorldCommand: CommandExecutor {
 
         sender.sendMessage("${NinjaFreebuild.getPrefix()}You are now in the Farmworld! You are allowed to Remove/ Build Blocks wherever you wish! §cThis world gets reset after a few days")
 
-        if (farmWorldCreated == null)
-            return false
+        val nextReset = farmWorldCreated!!.plusSeconds(60*config.getLong("world_configuration.farmworld.life_time_minutes")).minusSeconds(
+            Calendar.getInstance().time.toInstant().epochSecond).epochSecond/60
+
+        if (nextReset <= 720)
+        {
+            sender.sendMessage("${NinjaFreebuild.getPrefix()}§cThis world is going to be reset soon!")
+            return true
+        }
+        sender.sendMessage("${NinjaFreebuild.getPrefix()}Next Reset in: $nextReset minutes")
+
 
         return true
     }
+
 }
