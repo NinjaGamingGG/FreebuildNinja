@@ -51,9 +51,9 @@ class WorldManager {
             return newWorld
         }
 
-        fun worldExists(woldName: String): Boolean {
+        fun worldExists(worldName: String): Boolean {
 
-            return File("./$woldName").exists()
+            return File("./$worldName").exists()
         }
 
         fun unloadWorld(woldName: String, save: Boolean, delete: Boolean = false)
