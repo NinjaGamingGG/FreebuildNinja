@@ -2,8 +2,8 @@ package gg.ninjagaming.ninjafreebuild.managers
 
 import gg.ninjagaming.ninjafreebuild.NinjaFreebuild
 import gg.ninjagaming.ninjafreebuild.database.tables.FarmWorldIndex
+import org.bukkit.Bukkit
 import org.ktorm.database.Database
-import org.ktorm.database.iterator
 import org.ktorm.dsl.*
 import java.io.File
 import java.util.Calendar
@@ -27,15 +27,16 @@ companion object{
 
         val farmWorlds = database.from(FarmWorldIndex).select()
 
-        for(row in farmWorlds.rowSet)
-        {
-            handleWorld(row)
+
+        farmWorlds.forEach {
+            handleWorld(it)
         }
 
-        if (farmWorlds.rowSet.size() == 0)
-        {
+        if (farmWorlds.totalRecordsInAllPages == 0){
+            Bukkit.getLogger().info("No FarmWorld found in database, creating new one")
             createNewFarmWorld()
         }
+
     }
 
     private fun handleWorld(row :QueryRowSet)
@@ -46,6 +47,7 @@ companion object{
 
         val worldName = "Farmworld-$worldId"
 
+        //If the world doesn't exist anymore in file delete it from the database
         if (!WorldManager.worldExists(worldName))
         {
             database.delete(FarmWorldIndex){it.FarmWorldId eq worldId}
@@ -63,7 +65,8 @@ companion object{
         val now = Calendar.getInstance().time.toInstant()
 
 
-        if (expires.isBefore(now))
+        //Check if the lifetime is expired
+        if (!expires.isBefore(now))
         {
             deleteFarmWorld(database,worldId,worldName)
         }
@@ -92,6 +95,7 @@ companion object{
 
     private fun deleteFarmWorld(database: Database, worldId: String, worldName: String)
     {
+        Bukkit.getLogger().info("Deleting FarmWorld $worldId")
         database.delete(FarmWorldIndex){it.FarmWorldId eq worldId}
 
         WorldManager.unloadWorld(worldName,false, delete = true)
