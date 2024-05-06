@@ -5,6 +5,7 @@ import gg.ninjagaming.ninjafreebuild.database.tables.FarmWorldIndex
 import gg.ninjagaming.ninjafreebuild.database.tables.LastPlayerWorldPosition
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -64,13 +65,33 @@ class FarmWorldCommand: CommandExecutor {
         {
             val spawnRadius = config.getString("world_configuration.farmworld.spawn_radius")?.toInt()?: 200
 
-            lastPositionX =-spawnRadius + Random.nextDouble() * (spawnRadius - -spawnRadius)
-            lastPositionZ =-spawnRadius + Random.nextDouble() * (spawnRadius - -spawnRadius)
+            var isLocationValid = false
 
-            if (farmWorld == null)
-                return false
+            while (!isLocationValid) {
+                lastPositionX =-spawnRadius + Random.nextDouble() * (spawnRadius - -spawnRadius)
+                lastPositionZ =-spawnRadius + Random.nextDouble() * (spawnRadius - -spawnRadius)
 
-            lastPositionY = farmWorld.getHighestBlockYAt(Location(farmWorld,lastPositionX,0.0,lastPositionZ)).toDouble()
+                if (farmWorld == null)
+                    return false
+
+                lastPositionY = farmWorld.getHighestBlockYAt(Location(farmWorld,lastPositionX,0.0,lastPositionZ)).toDouble()
+
+                val blockedMaterials = listOf(Material.WATER, Material.LAVA, Material.END_PORTAL, Material.NETHER_PORTAL)
+
+                if (blockedMaterials.contains(farmWorld.getBlockAt(Location(farmWorld,lastPositionX,lastPositionY-1,lastPositionZ)).type)){
+                    isLocationValid = false
+                    continue
+                }
+
+                if (blockedMaterials.contains(farmWorld.getBlockAt(Location(farmWorld,lastPositionX,lastPositionY-2,lastPositionZ)).type)){
+                    isLocationValid = false
+                    continue
+                }
+
+                isLocationValid = true
+            }
+
+
         }
 
         for (row in lastPosition.rowSet)
