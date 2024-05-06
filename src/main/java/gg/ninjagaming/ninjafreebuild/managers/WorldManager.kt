@@ -16,6 +16,28 @@ class WorldManager {
      * This class provides utility functions for preparing different types of worlds.
      */
     companion object {
+        private val blockedRandomTeleportBlocks = listOf(Material.WATER, Material.LAVA, Material.END_PORTAL, Material.NETHER_PORTAL)
+
+        /**
+         * Checks if a random teleport location is safe in the given world.
+         *
+         * @param world The world where the teleport will occur.
+         * @param location The location where the teleport will occur.
+         * @return true if the random teleport location is safe, false otherwise.
+         */
+        fun isRandomTeleportLocationValid(world: World, location: Location): Boolean
+        {
+            if (blockedRandomTeleportBlocks.contains(world.getBlockAt(Location(world,location.x,location.y-1,location.z)).type)){
+                return false
+            }
+
+            if (blockedRandomTeleportBlocks.contains(world.getBlockAt(Location(world,location.x,location.y-2,location.z)).type)){
+                return false
+            }
+
+            return true
+        }
+
         /**
          * Prepares the wilderness world with the specified configurations.
          * It retrieves the wilderness world name from the configuration file and throws an exception if the name is not found.

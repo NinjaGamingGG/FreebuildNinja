@@ -3,9 +3,9 @@ package gg.ninjagaming.ninjafreebuild.commands.farmworld
 import gg.ninjagaming.ninjafreebuild.NinjaFreebuild
 import gg.ninjagaming.ninjafreebuild.database.tables.FarmWorldIndex
 import gg.ninjagaming.ninjafreebuild.database.tables.LastPlayerWorldPosition
+import gg.ninjagaming.ninjafreebuild.managers.WorldManager
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -76,19 +76,9 @@ class FarmWorldCommand: CommandExecutor {
 
                 lastPositionY = farmWorld.getHighestBlockYAt(Location(farmWorld,lastPositionX,0.0,lastPositionZ)).toDouble()
 
-                val blockedMaterials = listOf(Material.WATER, Material.LAVA, Material.END_PORTAL, Material.NETHER_PORTAL)
-
-                if (blockedMaterials.contains(farmWorld.getBlockAt(Location(farmWorld,lastPositionX,lastPositionY-1,lastPositionZ)).type)){
-                    isLocationValid = false
-                    continue
-                }
-
-                if (blockedMaterials.contains(farmWorld.getBlockAt(Location(farmWorld,lastPositionX,lastPositionY-2,lastPositionZ)).type)){
-                    isLocationValid = false
-                    continue
-                }
-
-                isLocationValid = true
+                isLocationValid = WorldManager.isRandomTeleportLocationValid(farmWorld,
+                    Location(farmWorld,lastPositionX,lastPositionY,lastPositionZ)
+                )
             }
 
 
