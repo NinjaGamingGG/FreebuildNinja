@@ -34,10 +34,17 @@ class WildernessCommand: CommandExecutor {
 
         var isLocationValid = false
         var retries = 0
+        val maxRetries = config.getString("world_configuration.wilderness.max_rtp_attempts")?.toInt()?: 99
 
         while (!isLocationValid)
         {
             retries++
+
+            if (retries == maxRetries) {
+                sender.sendMessage("${NinjaFreebuild.getPrefix()}§cUnable to find a valid random location in the Wilderness World for you. " +
+                        "This Operation Exceeded the maximum Amount of $maxRetries attempts, please try again later")
+                return true
+            }
 
             val randomX =-rtpArea + Random.nextDouble() * (rtpArea - -rtpArea)
             val randomZ =-rtpArea + Random.nextDouble() * (rtpArea - -rtpArea)

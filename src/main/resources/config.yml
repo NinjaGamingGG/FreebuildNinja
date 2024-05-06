@@ -13,6 +13,8 @@ world_configuration:
     world_name: wilderness
     # How big is the Spread for rtp into Wilderness i.e. with default radius of 3000 players will spawn in 3000x3000 area
     rtp_area: 3000
+    # How many times should the plugin try to find a valid location for rtp before aborting
+    max_rtp_attempts: 10
   farmworld:
     life_time_minutes: 20160
     spawn_radius: 500
