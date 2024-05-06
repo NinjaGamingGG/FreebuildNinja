@@ -1,2 +1,2 @@
 # NinjaFreebuild
-Experimental plugin for Managing /wildness, /spawn and /home commands for Freebuild or Factions Servers
+Experimental plugin for providing /wildness, /spawn, /home and rtp (Random Teleport) functionality for Freebuild or Factions Servers
