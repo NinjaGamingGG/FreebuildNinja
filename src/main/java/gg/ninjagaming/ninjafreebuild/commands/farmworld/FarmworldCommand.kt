@@ -50,7 +50,9 @@ class FarmWorldCommand: CommandExecutor {
 
         val worldName = "Farmworld-$farmWorldId"
 
-        val lastPosition = database.from(LastPlayerWorldPosition).select().where((LastPlayerWorldPosition.PlayerId eq sender.uniqueId.toString()) and (LastPlayerWorldPosition.WorldName eq worldName))
+        val lastPosition = database.from(LastPlayerWorldPosition)
+            .select()
+            .where((LastPlayerWorldPosition.PlayerId eq sender.uniqueId.toString()) and (LastPlayerWorldPosition.WorldName eq worldName))
 
         var lastPositionX = 0.0
         var lastPositionY = 0.0
