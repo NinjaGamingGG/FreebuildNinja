@@ -70,7 +70,7 @@ class FarmWorldCommand: CommandExecutor {
             val maxRetries = config.getString("world_configuration.max_rtp_attempts")?.toInt()?: 99
 
             while (!isLocationValid) {
-                retries++;
+                retries++
 
                 if (retries == maxRetries)
                     return true
