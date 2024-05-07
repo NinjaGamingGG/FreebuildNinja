@@ -66,8 +66,15 @@ class FarmWorldCommand: CommandExecutor {
             val spawnRadius = config.getString("world_configuration.farmworld.spawn_radius")?.toInt()?: 200
 
             var isLocationValid = false
+            var retries = 0
+            val maxRetries = config.getString("world_configuration.max_rtp_attempts")?.toInt()?: 99
 
             while (!isLocationValid) {
+                retries++;
+
+                if (retries == maxRetries)
+                    return true
+
                 lastPositionX =-spawnRadius + Random.nextDouble() * (spawnRadius - -spawnRadius)
                 lastPositionZ =-spawnRadius + Random.nextDouble() * (spawnRadius - -spawnRadius)
 

@@ -34,7 +34,7 @@ class WildernessCommand: CommandExecutor {
 
         var isLocationValid = false
         var retries = 0
-        val maxRetries = config.getString("world_configuration.wilderness.max_rtp_attempts")?.toInt()?: 99
+        val maxRetries = config.getString("world_configuration.max_rtp_attempts")?.toInt()?: 99
 
         while (!isLocationValid)
         {
