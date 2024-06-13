@@ -36,6 +36,12 @@ class WildernessCommand: CommandExecutor {
         var retries = 0
         val maxRetries = config.getString("world_configuration.max_rtp_attempts")?.toInt()?: 99
 
+        var randomX = 0.0
+        var randomZ = 0.0
+        var randomY = 0.0
+
+        val wildernessWorld = Bukkit.getWorld("wilderness")
+
         while (!isLocationValid)
         {
             retries++
@@ -46,10 +52,8 @@ class WildernessCommand: CommandExecutor {
                 return true
             }
 
-            val randomX =-rtpArea + Random.nextDouble() * (rtpArea - -rtpArea)
-            val randomZ =-rtpArea + Random.nextDouble() * (rtpArea - -rtpArea)
-
-            val wildernessWorld = Bukkit.getWorld("wilderness")
+            randomX =-rtpArea + Random.nextDouble() * (rtpArea - -rtpArea)
+            randomZ =-rtpArea + Random.nextDouble() * (rtpArea - -rtpArea)
 
             if (wildernessWorld == null) {
                 sender.sendMessage("${NinjaFreebuild.getPrefix()}§cThe wilderness world is not loaded, please try again later")
@@ -57,15 +61,15 @@ class WildernessCommand: CommandExecutor {
                 return true
             }
 
-            val randomY = wildernessWorld.getHighestBlockAt(Location(wildernessWorld, randomX, 0.0, randomZ)).location.y
+            randomY = wildernessWorld.getHighestBlockAt(Location(wildernessWorld, randomX, 0.0, randomZ)).location.y
 
             isLocationValid = WorldManager.isRandomTeleportLocationValid(wildernessWorld,Location(wildernessWorld,randomX,randomY,randomZ))
-
-            sender.sendMessage("${NinjaFreebuild.getPrefix()}§aTeleporting you to the wilderness...")
-
-            sender.teleport(Location(wildernessWorld, randomX, randomY, randomZ))
-            sender.sendMessage("${NinjaFreebuild.getPrefix()}§aFinding your new Location took $retries attempts")
         }
+
+        sender.sendMessage("${NinjaFreebuild.getPrefix()}§aTeleporting you to the wilderness...")
+
+        sender.teleport(Location(wildernessWorld, randomX, randomY, randomZ))
+        sender.sendMessage("${NinjaFreebuild.getPrefix()}§aFinding your new Location took $retries attempts")
 
      return true
     }
